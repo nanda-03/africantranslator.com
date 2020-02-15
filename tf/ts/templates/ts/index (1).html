@@ -1,0 +1,114 @@
+<!-- Elenver ca -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+    <head> 
+        <meta charset="UTF-8">
+        <title>tf</title>
+        
+        <script src="{% static 'js/jquery/jquery-2.2.4.min.js' %}"></script>
+        <!-- 
+            remplacer par le chemin vers votre fichier...
+        <script src="../../static/js/jquery/jquery-2.2.4.min.js"></script>
+        -->
+        <style>
+            .centre{
+                text-align: center;
+                margin: 10px 10px;
+                padding: 10px;
+            }
+
+            .bordure{
+                border: 3px solid #3CC;
+            }
+        </style>
+    </head>
+    <body>
+        <div class = 'centre bordure'>
+            <div class = 'centre'>
+                <label for="il">Langue d'entrée</label>
+                <select id='il' onchange="spread(this)">
+                    {% for langue in langues %}
+                        <option>{{ langue }}</option>
+                    {% endfor %}
+                </select>
+                <label for="tl">Langue de sortie</label>
+                <select id='tl' onchange="spread(this)">
+                    {% for langue in langues %}
+                        <option>{{ langue }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class = 'centre'>
+                <label for="it">Saisisez votre texte</label>
+                <textarea rows="7" id="it"></textarea>
+                <label for="tt">Traduction</label>
+                <textarea rows="7" id="tt" disabled></textarea>
+            </div>
+        </div>
+        <div class = 'centre'>
+            <button class = 'centre' onclick="submission()" id='modal-link'>Soumettre</button>
+        </div>
+        <script>     
+            function spread(target){
+                // todo : Faire en sorte qu'on ne pusse plus selectionné la meme langue de l'autre coté
+                var s;
+                if(target.id == 'il'){
+                    s = $("#il :selected")
+                    // enlever s de  $("#tl")
+                }else{
+                    s = $("#tl :selected")
+                    // enlever s de  $("#il")
+                }
+                // Prévenir pour le changement de langues
+                $.ajax({
+                    type: "POST",
+                    url: "lang", // remplacer par "http://127.0.0.1:8000/lang"
+                    dataType: "json",
+                    traditional: true,
+                    //headers: { 'api-key':'myKey' },
+                    data: {
+                        'input_language': $("#il :selected").text(),
+                        'target_language' : $("#tl :selected").text() 
+                    },
+                    success: function(data) {
+                        // Langues trouvées
+                        console.log(data);
+                        // Rétraduire le texte s'il en existait un
+                        submission();
+                    },
+                    error:function(error) {
+                        //Langues non trouvées
+                        console.log('error', error.statusCode());
+                    }
+                });
+            }
+
+            function submission(){
+                //*
+                text =  $("#it").val()
+                if (text.length != 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: "ts", // remplacer par "http://127.0.0.1:8000/ts"
+                        dataType: "json",
+                        traditional: true,
+                        //headers: { 'api-key':'myKey' },
+                        data: {'text': text },
+                        success: function(data) {
+                            // Traduction OK
+                            $("#tt").val(data['text'])
+                        },
+                        error:function(error) {
+                            // Traduction NON OK
+                            console.log('error', error.statusCode());
+                        }
+                    });
+                }
+                //*/
+            }
+        </script>
+    </body>
+</html>
+
