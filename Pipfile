@@ -13,14 +13,11 @@ sklearn= "*"
 matplotlib="*"
 django = "*"
 gunicorn = "*"
-<<<<<<< HEAD
 django-cors-headers = "*"
 google-api-python-client = "*"
 google-auth-httplib2 = "*"
 google-auth-oauthlib = "*"
 
-=======
->>>>>>> parent of b8488cc... add tensorflow
 
 [requires]
 python_version = "3.6"
