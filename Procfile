@@ -1,0 +1,1 @@
+web: gunicorn africa.wsgi:application
