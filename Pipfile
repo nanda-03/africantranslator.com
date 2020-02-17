@@ -7,10 +7,7 @@ verify_ssl = true
 
 [packages]
 
-numpy = "*"
-nltk = "*"
-sklearn= "*"
-matplotlib="*"
+
 django = "*"
 gunicorn = "*"
 django-cors-headers = "*"
